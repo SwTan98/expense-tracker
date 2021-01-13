@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { StyleSheet, FlatList, SectionList } from 'react-native';
+import { useEffect, useState, Fragment } from 'react';
+import { FlatList } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { moneyFormat } from '../components/helper';
 import ListItem from '../components/ListItem';
@@ -9,7 +9,7 @@ import { HomeParamList } from '../types';
 import { FloatingAction } from "react-native-floating-action";
 import { gql } from 'apollo-boost';
 import client from '../graphql';
-import moment from 'moment';
+import { styles } from './styles';
 
 const GET_RECORDS = gql`
   query GetRecords {
@@ -25,7 +25,7 @@ const GET_RECORDS = gql`
 `
 
 export default function HomeScreen({navigation, route,}: StackScreenProps<HomeParamList>) {
-  const [records, setRecords] = useState();
+  const [records, setRecords] = useState([]);
 
   const fetchData = async () => {
     const res = await client.query({
@@ -47,7 +47,7 @@ export default function HomeScreen({navigation, route,}: StackScreenProps<HomePa
 
   const actions = [
     {
-      text: 'New Record',
+      text: 'New Entry',
       icon: require('../assets/images/money.png'),
       name: 'new',
       position: 1,
@@ -58,7 +58,7 @@ export default function HomeScreen({navigation, route,}: StackScreenProps<HomePa
   const calculateTotal = () => {
     let total = 0;
     if (records) {
-      records.map((record) => {
+      records.map((record: { type: string; amount: number; }) => {
         if (record.type === 'income') {
           total = total + record.amount;
         } else if (record.type === 'expense') {
@@ -75,9 +75,18 @@ export default function HomeScreen({navigation, route,}: StackScreenProps<HomePa
         <Text style={styles.summaryTitle}>Nett Transactions:</Text>
         <Text style={styles.summaryText}>{moneyFormat(calculateTotal())}</Text>
       </View>
-      <FlatList data={records} renderItem={({item}) => (
-        <ListItem item={item} navigation={navigation} />
-      )} />
+      {records.length ? (
+        <Fragment>
+          <FlatList data={records} renderItem={({item}) => (
+          <ListItem item={item} navigation={navigation} />
+        )} />
+        </Fragment>
+      ) : (
+        <Text style={styles.noRecord}>
+          You have no transactions yet.
+          Enter your first transaction using the bottom right button.
+        </Text>
+      )}
       <FloatingAction
         actions={actions}
         color='mediumslateblue'
@@ -91,34 +100,4 @@ export default function HomeScreen({navigation, route,}: StackScreenProps<HomePa
       />
     </View>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  summary: {
-    backgroundColor: 'mediumslateblue',
-    opacity: 0.8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 10,
-    borderRadius: 10,
-  },
-  summaryTitle: {
-    fontSize: 20,
-    fontFamily: 'sans-serif-condensed',
-  },
-  summaryText: {
-    fontSize: 40,
-    fontFamily: 'sans-serif-condensed',
-  },
-  floatingBtn: {
-    position: 'absolute',
-    bottom: 10,
-    right: 10,
-  },
-  floatingBtnIcon: {
-    color: 'mediumslateblue',
-  }
-});
+};

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Alert, Platform, ToastAndroid } from 'react-native';
+import { Alert, Platform, ToastAndroid } from 'react-native';
 import { FloatingAction } from "react-native-floating-action";
 import moment from 'moment';
 import { gql } from 'apollo-boost';
@@ -7,6 +7,7 @@ import client from '../graphql';
 
 import { Text, View } from '../components/Themed';
 import { moneyFormat, titleFormat } from '../components/helper';
+import { styles } from './styles';
 
 const DELETE_RECORD = gql`
   mutation DeleteRecord ($input: MongoID!) {
@@ -83,32 +84,32 @@ export default function ItemScreen(props: { route: any, navigation: any }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.section}>
-        <Text style={styles.title}>
+      <View style={styles.itemSection}>
+        <Text style={styles.itemTitle}>
           Category
         </Text>
         <Text style={styles.desc}>
           {titleFormat(item.category)}
         </Text>
       </View>
-      <View style={styles.section}>
-        <Text style={styles.title}>
+      <View style={styles.itemSection}>
+        <Text style={styles.itemTitle}>
           Description
         </Text>
         <Text style={styles.desc}>
           {item.desc}
         </Text>
       </View>
-      <View style={styles.section}>
-        <Text style={styles.title}>
+      <View style={styles.itemSection}>
+        <Text style={styles.itemTitle}>
           {item.type === 'income' ? 'Money In' : 'Money Out'}
         </Text>
         <Text style={item.type === 'income' ? styles.moneyIn : styles.moneyOut}>
           {moneyFormat(item.amount)}
         </Text>
       </View>
-      <View style={styles.section}>
-        <Text style={styles.title}>Time</Text>
+      <View style={styles.itemSection}>
+        <Text style={styles.itemTitle}>Time</Text>
         <Text style={styles.desc}>
           {moment(item.date).format('DD MMM YYYY, hh:mm A')}
         </Text>
@@ -122,31 +123,4 @@ export default function ItemScreen(props: { route: any, navigation: any }) {
       />
     </View>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  section: {
-    padding: 15,
-    borderBottomWidth: 0.5,
-    borderColor: '#666',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'mediumslateblue',
-  },
-  desc: {
-    fontSize: 16,
-  },
-  moneyIn: {
-    color: 'darkgreen',
-    fontSize: 16,
-  },
-  moneyOut: {
-    color: 'firebrick',
-    fontSize: 16,
-  },
-});
+};

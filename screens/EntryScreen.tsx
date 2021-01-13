@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { StyleSheet, TouchableOpacity, Platform, ToastAndroid } from 'react-native';
 import { Formik } from 'formik';
-import { string, number, boolean, object, } from 'yup';
+import { string, number, object, } from 'yup';
 import {Picker} from '@react-native-picker/picker';
 import { gql } from 'apollo-boost';
 import client from '../graphql';
+import {styles} from './styles';
 
 import { Text, View, TextInput, useThemeColor } from '../components/Themed';
 
@@ -209,54 +210,4 @@ export default function ItemScreen(props: { navigation: any; route: any; }) {
         }}
     </Formik>
   )
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-  },
-  section: {
-    paddingBottom: 20,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    paddingBottom: 5,
-  },
-  input: {
-    height: 50,
-    borderWidth: 0.3,
-    borderRadius: 5,
-    borderColor: 'mediumslateblue',
-    padding: 10,
-    justifyContent: 'center',
-  },
-  inputError: {
-    height: 50,
-    borderWidth: 0.3,
-    borderRadius: 5,
-    borderColor: 'crimson',
-    padding: 10,
-    justifyContent: 'center',
-  },
-  error: {
-    fontSize: 12,
-    color: 'crimson',
-  },
-  btn: {
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 150,
-    height: 50,
-    borderRadius: 75,
-    backgroundColor: 'mediumslateblue',
-    color: '#fff'
-  },
-  btnText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white',
-  }
-});
+};
