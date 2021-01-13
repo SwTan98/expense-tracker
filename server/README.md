@@ -1,11 +1,13 @@
 # Server
 
 ## Prerequisites
-.env file containing mongodb URI
-### Example
+* MongoDB installed
+### .env file
+* To create .env file
 ```
-MONGO_URI=mongodb://localhost
+cp .env.example .env
 ```
+* Replace `mongodb://localhost` with your mongo URI
 
 ## Getting started
 ```
