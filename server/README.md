@@ -8,12 +8,12 @@ Proceed to http://localhost:3030
 
 ### To create
 
-POST /record type: form-data img: $img
+POST /record
 
 ### To view
 
-GET /img
+GET /record
 
 ### To get one image
 
-GET /img/:id
+GET /record/:id
