@@ -1,8 +1,8 @@
 # Server
 
 ## Prerequisites
-MongoDB installed
-.env file containing mongodb URI
+* MongoDB installed
+* .env file containing mongodb URI
 ### Example
 ```
 MONGO_URI=mongodb://localhost
