@@ -72,7 +72,7 @@ export default function HomeScreen({navigation, route,}: StackScreenProps<HomePa
   return (
     <View style={styles.container}>
       <View style={styles.summary}>
-        <Text style={styles.summaryTitle}>Nett Transactions:</Text>
+        <Text style={styles.summaryTitle}>Net Transactions:</Text>
         <Text style={styles.summaryText}>{moneyFormat(calculateTotal())}</Text>
       </View>
       {records.length ? (
