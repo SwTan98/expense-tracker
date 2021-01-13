@@ -2,6 +2,7 @@
 
 ## Installation
 ```
+npm install --global expo-cli
 npm i
 expo start
 ```
