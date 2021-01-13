@@ -1,8 +1,8 @@
-var express = require('express');
-var cors = require('cors');
-var logger = require('morgan');
-var multer = require('multer')
-var upload = multer()
+const express = require('express');
+const cors = require('cors');
+const logger = require('morgan');
+const multer = require('multer')
+const upload = multer()
 
 const { ApolloServer, gql } = require('apollo-server-express');
 const { makeExecutableSchema } = require('graphql-tools');
@@ -13,18 +13,18 @@ const { schemaComposer } = require('graphql-compose')
 require('dotenv').config()
 
 // MONGO DB
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
-var db = mongoose.connection;
+const db = mongoose.connection;
 
 
 db.on('error', console.error.bind(console, 'connection error:'));
 
-var userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   username: String,
   password: String,
 })
-var recordSchema = new mongoose.Schema(
+const recordSchema = new mongoose.Schema(
   {
     category: {
       type: String,
@@ -53,7 +53,7 @@ const UserModel = mongoose.model('User', userSchema)
 const RecordModel = mongoose.model('Record', recordSchema)
 
 // EXPRESS
-var app = express();
+const app = express();
 
 app.use(cors());
 app.use(logger('dev'));
@@ -91,88 +91,5 @@ const server = new ApolloServer({
 });
     
 server.applyMiddleware({ app });
-
-
-// RESTFUL ROUTES
-
-app.post('/record', upload.none(), function (req, res, next) {
-
-  console.log(req.body)
-
-  if (Object.keys(req.body).length === 0) {
-      res.status(400).json({
-          "error": "Please dont send empty"
-      })
-      return next
-  }
-  
-  RecordModel.create({
-    category: req.body.category,
-    desc: req.body.desc,
-    amount: req.body.amount,
-    type: req.body.type,
-    date: req.body.date,
-  }, function (err, record) {
-    if (err) return next(err);
-
-    res.status(201).json({
-      "message": "Uploaded",
-      "data": record
-    })
-  })
-    
-})
-
-app.get('/record', function (req, res) {
-  RecordModel.find({}, function (err, record) {
-    res.json({
-      "data" : record
-    })
-  })
-})
-
-app.get('/record/:id', function (req, res) {
-  console.log(res.params)
-  RecordModel.findById(req.params.id, function (err, record) {
-    res.json({
-        "data" : record
-    })
-  })
-})
-
-app.put('/record/:id', upload.none(), function (req, res) {
-  RecordModel.findByIdAndUpdate(
-    req.params.id,
-    {
-      category: req.body.category,
-      desc: req.body.desc,
-      amount: req.body.amount,
-      type: req.body.type,
-      date: req.body.date,
-    },
-    function (err, data) {
-      if (err) throw err
-        res.json({ data })
-    }
-  )
-})
-
-app.delete('/record/:id', function (req, res) {
-  RecordModel.findByIdAndRemove(req.params.id, function (err, data) {
-    res.json({ data })
-  })
-})
-
-app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  res.status(err.status || 500);
-  res.json({
-    "error": err
-  });
-  });
-
 
 module.exports = app;
