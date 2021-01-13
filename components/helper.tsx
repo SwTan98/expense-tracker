@@ -1,7 +1,30 @@
-// import { v4 as uuidv4 } from 'uuid';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useEffect } from 'react';
 
-export const moneyFormat = (money: number) => `RM ${money.toFixed(2)}`;
+export const moneyFormat = (money: number) => {
+  const [currency, setCurrency] = useState('MYR');
+  const [loading, setLoading] = useState(false);
 
-// export const uuid = () => uuidv4();
+  useEffect(() => {
+    fetchCurrency();
+  }, []);
+
+  const fetchCurrency = async () => {
+    try {
+      setLoading(true);
+      const currency = await AsyncStorage.getItem('@currency');
+      if (currency !== null) {
+        setCurrency(currency);
+      }
+      setLoading(false);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  if (!loading) {
+    return `${currency.toUpperCase()} ${money.toFixed(2)}`;
+  }
+};
 
 export const titleFormat = (title: string) => title.charAt(0).toUpperCase() + title.slice(1);
