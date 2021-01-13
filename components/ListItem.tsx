@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   listItemDesc: {
     flexDirection: 'column',
-    width: '75%',
+    width: '70%',
     paddingRight: 30,
   },
   listItemText: {
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     color: 'dimgray'
   },
   listItemAmount: {
-    width: '25%',
+    width: '30%',
     alignItems: 'flex-start',
   },
   listItemAmountIn: {
