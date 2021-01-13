@@ -1,6 +1,7 @@
 # Server
 
 ## Prerequisites
+MongoDB installed
 .env file containing mongodb URI
 ### Example
 ```
