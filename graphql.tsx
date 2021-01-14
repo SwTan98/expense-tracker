@@ -1,7 +1,4 @@
-import { ApolloClient } from "apollo-boost";
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { HttpLink } from 'apollo-link-http';
-
+import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 
 const defaultOptions = {
   watchQuery: {
@@ -16,7 +13,8 @@ const defaultOptions = {
 
 const cache = new InMemoryCache();
 const link = new HttpLink({
-  uri: 'https://expense-tracker-graphql.herokuapp.com/graphql',
+  // uri: 'https://expense-tracker-graphql.herokuapp.com/graphql',
+  uri: 'http://192.168.0.157:3030/graphql',
   fetch:fetch
 });
 

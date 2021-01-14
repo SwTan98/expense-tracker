@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity, Platform, ToastAndroid } from 'react-nati
 import { Formik } from 'formik';
 import { string, number, object, } from 'yup';
 import {Picker} from '@react-native-picker/picker';
-import { gql } from 'apollo-boost';
+import { gql } from '@apollo/client';
 import client from '../graphql';
 import {styles} from './styles';
 

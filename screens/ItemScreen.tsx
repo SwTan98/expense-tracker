@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Alert, Platform, ToastAndroid } from 'react-native';
 import { FloatingAction } from "react-native-floating-action";
 import moment from 'moment';
-import { gql } from 'apollo-boost';
+import { gql } from '@apollo/client';
 import client from '../graphql';
 
 import { Text, View } from '../components/Themed';

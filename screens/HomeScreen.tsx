@@ -7,13 +7,14 @@ import ListItem from '../components/ListItem';
 import { StackScreenProps } from '@react-navigation/stack';
 import { HomeParamList } from '../types';
 import { FloatingAction } from "react-native-floating-action";
-import { gql } from 'apollo-boost';
+import { gql } from '@apollo/client';
 import client from '../graphql';
+import { Query } from '@apollo/client/react/components';
 import { styles } from './styles';
 
 const GET_RECORDS = gql`
-  query GetRecords {
-    records (sort: _ID_DESC) {
+  query GetRecords ($limit: Int!) {
+    records (sort: _ID_DESC, limit: $limit) {
       _id
       category
       desc
@@ -29,8 +30,11 @@ export default function HomeScreen({navigation, route,}: StackScreenProps<HomePa
 
   const fetchData = async () => {
     const res = await client.query({
-      query: GET_RECORDS
-    })
+      query: GET_RECORDS,
+      variables: {
+        limit: 15,
+      },
+    });
 
     setRecords(await res.data.records.map((record: { [x: string]: any; _id: any; }) => {
       const {_id: id, ...recordDetails} = record;
@@ -43,7 +47,7 @@ export default function HomeScreen({navigation, route,}: StackScreenProps<HomePa
       fetchData();
     });
     return(reload);
-  }, [navigation])
+  }, []);
 
   const actions = [
     {
@@ -76,11 +80,10 @@ export default function HomeScreen({navigation, route,}: StackScreenProps<HomePa
         <Text style={styles.summaryText}>{moneyFormat(calculateTotal())}</Text>
       </View>
       {records.length ? (
-        <Fragment>
-          <FlatList data={records} renderItem={({item}) => (
+        <FlatList onEndReached={() => {
+        }} data={records} renderItem={({item}) => (
           <ListItem item={item} navigation={navigation} />
         )} />
-        </Fragment>
       ) : (
         <Text style={styles.noRecord}>
           You have no transactions yet.
