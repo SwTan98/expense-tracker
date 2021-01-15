@@ -53,7 +53,6 @@ export default function HomeScreen({navigation, route,}: StackScreenProps<HomePa
     if (search) {
       variables.desc = search;
     };
-    console.log(variables);
     fetchData(variables);
     return(reload);
   }, [typeFilter, search]);

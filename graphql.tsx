@@ -13,8 +13,8 @@ const defaultOptions = {
 
 const cache = new InMemoryCache();
 const link = new HttpLink({
-  // uri: 'https://expense-tracker-graphql.herokuapp.com/graphql',
-  uri: 'http://192.168.0.157:3030/graphql',
+  uri: 'https://expense-tracker-graphql.herokuapp.com/graphql',
+  // uri: 'http://192.168.0.157:3030/graphql', // for local db tests only
   fetch:fetch
 });
 
