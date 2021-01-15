@@ -20,6 +20,7 @@ export const styles = StyleSheet.create({
     borderColor: 'mediumslateblue',
     padding: 10,
     justifyContent: 'center',
+    marginBottom: 10,
   },
   inputError: {
     height: 50,
@@ -55,6 +56,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10,
     borderRadius: 10,
+    marginBottom: 10,
   },
   summaryTitle: {
     fontSize: 20,
@@ -123,4 +125,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'stretch',
   },
+  filter: {
+    backgroundColor: 'mediumslateblue',
+    opacity: 0.8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    borderRadius: 10,
+  }
 });

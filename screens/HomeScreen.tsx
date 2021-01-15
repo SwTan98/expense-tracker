@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { useEffect, useState, Fragment } from 'react';
+import { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
-import { Text, View } from '../components/Themed';
+import { Text, View, TextInput, useThemeColor } from '../components/Themed';
 import { moneyFormat } from '../components/helper';
 import ListItem from '../components/ListItem';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -9,12 +9,12 @@ import { HomeParamList } from '../types';
 import { FloatingAction } from "react-native-floating-action";
 import { gql } from '@apollo/client';
 import client from '../graphql';
-import { Query } from '@apollo/client/react/components';
 import { styles } from './styles';
+import {Picker} from '@react-native-picker/picker';
 
 const GET_RECORDS = gql`
-  query GetRecords ($limit: Int!) {
-    records (sort: _ID_DESC, limit: $limit) {
+  query GetRecords ($type: EnumRecordType, $desc: String) {
+    records (sort: _ID_DESC, filter: {type: $type, desc: $desc}) {
       _id
       category
       desc
@@ -27,13 +27,13 @@ const GET_RECORDS = gql`
 
 export default function HomeScreen({navigation, route,}: StackScreenProps<HomeParamList>) {
   const [records, setRecords] = useState([]);
+  const [typeFilter, setTypeFilter] = useState('');
+  const [search, setSearch] = useState('');
 
-  const fetchData = async () => {
+  const fetchData = async (variables: {}) => {
     const res = await client.query({
       query: GET_RECORDS,
-      variables: {
-        limit: 15,
-      },
+      variables,
     });
 
     setRecords(await res.data.records.map((record: { [x: string]: any; _id: any; }) => {
@@ -43,11 +43,20 @@ export default function HomeScreen({navigation, route,}: StackScreenProps<HomePa
   }
 
   useEffect(() => {
+    const variables = {};
     const reload = navigation.addListener('focus', () => {
-      fetchData();
+      fetchData(variables);
     });
+    if (typeFilter) {
+      variables.type = typeFilter;
+    };
+    if (search) {
+      variables.desc = search;
+    };
+    console.log(variables);
+    fetchData(variables);
     return(reload);
-  }, []);
+  }, [typeFilter, search]);
 
   const actions = [
     {
@@ -73,12 +82,43 @@ export default function HomeScreen({navigation, route,}: StackScreenProps<HomePa
     return total;
   };
 
+  const types = [
+    {label: 'Transaction filter', value: ''},
+    {label: 'Income', value: 'income'},
+    {label: 'Expense', value: 'expense'},
+  ];
+
+  const color = useThemeColor({ light: 'black', dark: 'white' }, 'text');
+
   return (
     <View style={styles.container}>
       <View style={styles.summary}>
         <Text style={styles.summaryTitle}>Net Transactions:</Text>
         <Text style={styles.summaryText}>{moneyFormat(calculateTotal())}</Text>
       </View>
+      <View style={styles.input}>
+        <Picker
+          selectedValue={typeFilter}
+          onValueChange={setTypeFilter}
+          dropdownIconColor='#7b68ee'
+          style={{color, borderWidth: 0}}
+        >
+          {types.map((type, index) => (
+            <Picker.Item
+              key={index}
+              label={type.label}
+              value={type.value}
+            />
+          ))}
+        </Picker>
+      </View>
+      <TextInput
+        style={styles.input}
+        value={search}
+        onChangeText={setSearch}
+        placeholder="Search by description..."
+        placeholderTextColor="#AAA"
+      />
       {records.length ? (
         <FlatList onEndReached={() => {
         }} data={records} renderItem={({item}) => (
