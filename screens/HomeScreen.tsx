@@ -32,7 +32,7 @@ export default function HomeScreen({navigation, route,}: StackScreenProps<HomePa
 
   const fetchData = async (variables: {}) => {
     const res = await client.query({
-      // query: GET_RECORDS,
+      query: GET_RECORDS,
       variables,
     });
 
